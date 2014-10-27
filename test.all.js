@@ -634,4 +634,40 @@ define( function( require, exports, module ){
             });
         });
     });
+
+    describe( 'Custom attributes with NestedTypes.options() ', function() {
+        var CustomAttribute = Base.options({
+            get : sinon.stub(),
+            set : sinon.stub()
+        });
+
+        var newModelWithCustomAttr = function() {
+            var Model = Base.Model.extend({
+                defaults : {
+                    myAttr : CustomAttribute
+                }
+            });
+
+            CustomAttribute.get.reset();
+            CustomAttribute.set.reset();
+
+            return new Model();
+        };
+
+        it('should invoke custom setter when assigning directly', function() {
+            var myModel = newModelWithCustomAttr();
+
+            myModel.myAttr = 42;
+
+            CustomAttribute.set.calledWithExactly(42).should.be.true;
+        });
+
+        it('should invoke custom setter when assigning with set() method', function() {
+            var myModel = newModelWithCustomAttr();
+
+            myModel.set("myAttr", 42);
+
+            CustomAttribute.set.calledWithExactly(42).should.be.true;
+        })
+    });
 });
