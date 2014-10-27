@@ -654,6 +654,31 @@ define( function( require, exports, module ){
             return new Model();
         };
 
+
+        it('should invoke custom getter on each read', function() {
+            var myModel = newModelWithCustomAttr();
+
+            CustomAttribute.get.returns(17);
+            myModel.myAttr.should.equal(17);
+
+            CustomAttribute.get.returns(100);
+            myModel.myAttr.should.equal(100);
+
+        });
+
+
+        it('should invoke custom getter on each read when using get() method', function() {
+            var myModel = newModelWithCustomAttr();
+
+            CustomAttribute.get.returns(17);
+            myModel.get("myAttr").should.equal(17);
+
+            CustomAttribute.get.returns(100);
+            myModel.get("myAttr").should.equal(100);
+        });
+
+
+
         it('should invoke custom setter when assigning directly', function() {
             var myModel = newModelWithCustomAttr();
 
@@ -661,6 +686,7 @@ define( function( require, exports, module ){
 
             CustomAttribute.set.calledWithExactly(42).should.be.true;
         });
+
 
         it('should invoke custom setter when assigning with set() method', function() {
             var myModel = newModelWithCustomAttr();
